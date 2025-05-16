@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>WISH - Home</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Welcome to Wish</h1>
+    <p>로그인 후 게시판을 자유롭게 이용해보세요.</p>
+
+    <!-- ✅ container 안쪽에서 절대 위치 -->
+    <div class="write-btn-container">
+        <a th:href="@{/posts}" class="btn">게시판 바로가기</a>
+    </div>
+</div>
+
+</body>
+</html>
