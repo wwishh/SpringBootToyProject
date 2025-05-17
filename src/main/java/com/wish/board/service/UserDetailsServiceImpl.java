@@ -20,7 +20,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles("USER")  // 필요한 경우 역할 관리 추가
+                .roles(user.getRole())  // DB에 저장된 role (ex: "USER", "ADMIN") 반영
                 .build();
     }
+
 }

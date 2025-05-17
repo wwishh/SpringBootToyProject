@@ -1,7 +1,6 @@
 package com.wish.board.controller;
 
 import com.wish.board.domain.Post;
-import com.wish.board.domain.User;
 import com.wish.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -91,8 +91,9 @@ public class PostController {
 
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Long id) {
-        postService.delete(id);
+    public String delete(@PathVariable Long id, Authentication authentication) {
+        postService.delete(id, authentication);
         return "redirect:/posts";
     }
+
 }

@@ -26,6 +26,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private String role = "USER";
+
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 }
