@@ -20,9 +20,15 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(@ModelAttribute User user) {
-        userService.register(user);
-        return "redirect:/login";
+    public String signup(@ModelAttribute User user, Model model) {
+        try {
+            userService.register(user);
+            return "redirect:/login";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("user", user);  // 입력 값 유지
+            return "user/signup";
+        }
     }
 
     @GetMapping("/login")

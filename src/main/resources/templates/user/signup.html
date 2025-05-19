@@ -7,6 +7,11 @@
 <body>
 <div class="container">
   <h1>회원가입</h1>
+
+  <div th:if="${errorMessage}" class="error-message" style="color: red; margin-bottom: 10px;">
+    <p th:text="${errorMessage}"></p>
+  </div>
+
   <form th:action="@{/signup}" th:object="${user}" method="post">
     <label for="username">아이디</label>
     <input type="text" id="username" th:field="*{username}" required>
