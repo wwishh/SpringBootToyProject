@@ -6,7 +6,7 @@
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<div th:replace="fragments/header :: header-bar"></div>
+<div th:replace="~{fragments/header :: header-bar}"></div>
 
 <div class="container">
     <h1 th:text="${post.id != null ? '글 수정' : '글쓰기'}">글쓰기</h1>

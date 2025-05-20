@@ -2,6 +2,8 @@ package com.wish.board.controller;
 
 import com.wish.board.domain.Post;
 import com.wish.board.service.PostService;
+import com.wish.board.service.CommentService;
+import com.wish.board.domain.Comment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     @GetMapping
     public String list(Model model) {
@@ -61,8 +64,12 @@ public class PostController {
         Post post = postService.findById(id);
         String formattedDate = post.getCreatedAt() != null ? post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "";
 
+        // 댓글 리스트 조회
+        List<Comment> comments = commentService.getCommentsByPostId(id);
+
         model.addAttribute("post", post);
         model.addAttribute("formattedDate", formattedDate);
+        model.addAttribute("comments", comments);  // 추가
         return "post/detail";
     }
 
