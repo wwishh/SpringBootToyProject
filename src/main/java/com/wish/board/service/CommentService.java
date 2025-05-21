@@ -40,6 +40,7 @@ public class CommentService {
             throw new SecurityException("댓글을 수정할 권한이 없습니다.");
         }
         comment.setContent(content);
+        comment.setCreatedAt(LocalDateTime.now());
         return commentRepository.save(comment);
     }
 

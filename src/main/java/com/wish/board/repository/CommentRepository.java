@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+    // 기존 서비스 코드를 위해 post.id로 변경
     List<Comment> findByPostIdOrderByCreatedAtDesc(Long postId);
 }

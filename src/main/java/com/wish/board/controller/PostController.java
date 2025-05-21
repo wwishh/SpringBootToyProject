@@ -37,6 +37,11 @@ public class PostController {
             map.put("title", post.getTitle());
             map.put("author", post.getAuthor());
             map.put("createdAt", post.getCreatedAt() != null ? post.getCreatedAt().format(formatter) : "");
+
+            // 댓글 수 추가
+            int commentCount = commentService.getCommentsByPostId(post.getId()).size();
+            map.put("commentCount", commentCount);
+
             return map;
         }).collect(Collectors.toList());
 
@@ -64,14 +69,28 @@ public class PostController {
         Post post = postService.findById(id);
         String formattedDate = post.getCreatedAt() != null ? post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "";
 
-        // 댓글 리스트 조회
         List<Comment> comments = commentService.getCommentsByPostId(id);
+
+        // 댓글 개수 추가
+        int commentCount = comments.size();
+
+        // 각 댓글에 formattedDate 속성 추가 (속성을 Map으로 전달)
+        List<Map<String, Object>> formattedComments = comments.stream().map(comment -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", comment.getId());
+            map.put("username", comment.getUsername());
+            map.put("content", comment.getContent());
+            map.put("formattedDate", comment.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            return map;
+        }).collect(Collectors.toList());
 
         model.addAttribute("post", post);
         model.addAttribute("formattedDate", formattedDate);
-        model.addAttribute("comments", comments);  // 추가
+        model.addAttribute("comments", formattedComments);  // 여기를 Map 리스트로 교체
+        model.addAttribute("commentCount", commentCount);  // 댓글 개수 추가
         return "post/detail";
     }
+
 
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable("id") Long id, Model model) {

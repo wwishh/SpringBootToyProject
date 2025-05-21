@@ -134,3 +134,73 @@ textarea {
     margin-right: 10px;
     font-weight: bold;
 }
+
+.post-actions {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
+  gap: 10px; /* 버튼 사이 간격 */
+  margin-top: 10px; /* 필요하면 위쪽 여백 */
+  align-items: center; /* 버튼 수직 정렬 */
+}
+
+.post-actions a.btn,
+.post-actions button.btn {
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+
+#comment-list {
+  list-style: none;       /* 기본 점 제거 */
+  padding-left: 0;        /* 들여쓰기 제거 */
+  margin-left: 0;         /* 추가 여백 제거 */
+}
+
+#comment-list li {
+  margin-left: 0;         /* li 자체의 여백도 제거 */
+}
+
+.comment-count {
+  margin-left: 5px;       /* 제목과 댓글 수 사이 간격 */
+  color: red;             /* 빨간색 */
+  font-weight: bold;      /* 좀 더 강조 */
+}
+
+
+/* 댓글 줄 전체를 수평 정렬 */
+.comment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 6px;
+  border-bottom: 1px solid #ccc;
+}
+
+/* 댓글 텍스트 영역 */
+.comment-left {
+  flex: 1;
+  font-size: 14px;
+}
+
+/* 버튼 영역 (오른쪽) */
+.comment-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* 작은 버튼 스타일 */
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 13px;
+  border-radius: 5px;
+  background-color: #444;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-sm:hover {
+  background-color: #222;
+}
