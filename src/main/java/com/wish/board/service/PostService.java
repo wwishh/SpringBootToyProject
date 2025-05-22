@@ -1,6 +1,7 @@
 package com.wish.board.service;
 
 import com.wish.board.domain.Post;
+import com.wish.board.repository.CommentRepository;
 import com.wish.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -16,6 +17,7 @@ import java.util.NoSuchElementException;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;  // 댓글 레포 추가
 
     // 게시글 저장
     public Post save(Post post) {
@@ -59,6 +61,9 @@ public class PostService {
         if (!post.getAuthor().equals(currentUsername) && !isAdmin) {
             throw new SecurityException("삭제 권한이 없습니다.");
         }
+
+        // 1. 댓글 먼저 삭제
+        commentRepository.deleteByPostId(id);
 
         postRepository.delete(post);
     }
