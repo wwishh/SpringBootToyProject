@@ -21,10 +21,18 @@ spring:
     suffix: .html
     mode: HTML
     encoding: UTF-8
-    cache: false  # 개발 중에는 캐시를 비활성화해 변경 사항이 바로 반영되도록 합니다.
+    cache: false
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  web:
+    resources:
+      static-locations: classpath:/static/, file:uploads/
 
 logging:
   level:
     org.hibernate.SQL: debug
-
-

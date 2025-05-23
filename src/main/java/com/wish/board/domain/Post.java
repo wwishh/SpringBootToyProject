@@ -24,9 +24,8 @@ public class Post {
     @CreatedDate
     private LocalDateTime createdAt;
 
-//    // ✅ 게시글 삭제 시 댓글도 함께 삭제되도록 설정
-//    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
-//    private List<Comment> comments = new ArrayList<>();
+    private String imagePath; // 예: /uploads/image123.png
+
 
     @PrePersist
     public void prePersist() {

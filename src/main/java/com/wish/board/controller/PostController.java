@@ -9,13 +9,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -37,6 +39,8 @@ public class PostController {
             map.put("title", post.getTitle());
             map.put("author", post.getAuthor());
             map.put("createdAt", post.getCreatedAt() != null ? post.getCreatedAt().format(formatter) : "");
+            map.put("hasImage", post.getImagePath() != null && !post.getImagePath().isBlank());
+
 
             // 댓글 수 추가
             int commentCount = commentService.getCommentsByPostId(post.getId()).size();
@@ -57,9 +61,15 @@ public class PostController {
         return "post/form";
     }
 
+    // 글 작성
     @PostMapping
-    public String create(@ModelAttribute Post post, @AuthenticationPrincipal UserDetails userDetails) {
+    public String create(@ModelAttribute Post post,
+                         @AuthenticationPrincipal UserDetails userDetails,
+                         @RequestParam("imageFile") MultipartFile imageFile) {
         post.setAuthor(userDetails.getUsername());
+
+        handleImageUpload(post, imageFile);
+
         postService.save(post);
         return "redirect:/posts";
     }
@@ -98,17 +108,33 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("formAction", "/posts/" + id + "/edit");
         model.addAttribute("isEdit", true);
+
+        // 기존 이미지 경로 추가
+        model.addAttribute("existingImagePath", post.getImagePath());
+
         return "post/form";
     }
 
+    // 글 수정 (기존 이미지 유지 반영)
     @PostMapping("/{id}/edit")
-    public String update(@PathVariable Long id, @ModelAttribute Post post) {
+    public String update(@PathVariable("id") Long id,
+                         @ModelAttribute Post post,
+                         @RequestParam("imageFile") MultipartFile imageFile,
+                         @RequestParam(value = "existingImagePath", required = false) String existingImagePath) {
+
         post.setId(id);
 
-        // 기존 작성자 정보가 없으면 DB에서 가져와서 설정
+        // 기존 작성자 유지
         if (post.getAuthor() == null || post.getAuthor().isBlank()) {
             Post existingPost = postService.findById(id);
             post.setAuthor(existingPost.getAuthor());
+        }
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            handleImageUpload(post, imageFile);
+        } else {
+            // 새 이미지 없으면 기존 이미지 경로 유지
+            post.setImagePath(existingImagePath);
         }
 
         postService.save(post);
@@ -122,4 +148,46 @@ public class PostController {
         return "redirect:/posts";
     }
 
+    // 이미지 업로드 처리 메서드
+    private void handleImageUpload(Post post, MultipartFile imageFile) {
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String originalFileName = imageFile.getOriginalFilename();
+                if (originalFileName == null) {
+                    throw new IllegalArgumentException("이미지 파일 이름이 null입니다.");
+                }
+
+                String fileName = StringUtils.cleanPath(originalFileName);
+                String uploadDir = System.getProperty("user.dir") + "/uploads/";
+
+                File uploadPath = new File(uploadDir);
+                if (!uploadPath.exists()) {
+                    boolean created = uploadPath.mkdirs();
+                    if (!created) {
+                        throw new IOException("업로드 디렉토리를 생성하지 못했습니다.");
+                    }
+                }
+
+                String uuid = UUID.randomUUID().toString();
+                String savedFileName = uuid + "_" + fileName;
+                String filePath = uploadDir + savedFileName;
+                File dest = new File(filePath);
+                imageFile.transferTo(dest);
+
+                // 웹 접근용 경로: /uploads/파일명 으로만 저장
+                post.setImagePath("/uploads/" + savedFileName);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
 }
+
+
+
+
+

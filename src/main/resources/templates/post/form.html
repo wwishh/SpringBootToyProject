@@ -11,7 +11,7 @@
 <div class="container">
     <h1 th:text="${post.id != null ? '글 수정' : '글쓰기'}">글쓰기</h1>
 
-    <form th:action="@{${formAction}}" method="post">
+    <form th:action="@{${formAction}}" method="post" enctype="multipart/form-data">
         <label for="title">제목</label>
         <input type="text" id="title" name="title" th:value="${post.title}" required>
 
@@ -19,6 +19,17 @@
         <textarea id="content" name="content" required th:text="${post.content}"></textarea>
 
         <input type="hidden" name="author" th:value="${post.author}"/>
+
+        <!-- 기존 이미지 경로를 hidden으로 폼에 포함 -->
+        <input type="hidden" name="existingImagePath" th:value="${post.imagePath}" />
+
+        <!-- 이미지 업로드 추가 -->
+        <input type="file" name="imageFile" accept="image/*">
+
+        <!-- 기존 이미지 표시 -->
+        <div th:if="${post.imagePath != null}" style="margin-top: 10px;">
+            <img th:src="@{${post.imagePath}}" alt="기존 이미지" class="fixed-img" />
+        </div>
 
         <div class="btn-container">
             <button type="submit" th:text="${post.id != null ? '수정하기' : '등록하기'}">등록하기</button>

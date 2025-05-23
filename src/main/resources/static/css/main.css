@@ -204,3 +204,11 @@ textarea {
 .btn-sm:hover {
   background-color: #222;
 }
+
+.fixed-img {
+  width: 500px;
+  height: 300px;
+  object-fit: contain;   /* 비율 유지하며 '전체 이미지'가 보이도록 함 */
+  margin-top: 10px;
+}
+
