@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .defaultSuccessUrl("/posts", true)
                         .permitAll()
+                        .failureUrl("/login?error=true") // 실패 시 ?error=true 쿼리 파라미터 전달
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")

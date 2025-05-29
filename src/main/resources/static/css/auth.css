@@ -66,3 +66,9 @@ a.btn:hover {
     gap: 10px;
     margin-top: 1rem;
 }
+
+ .error-message {
+      color: red;
+      margin-bottom: 10px;
+      text-align: center;
+ }
