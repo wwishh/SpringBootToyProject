@@ -32,4 +32,7 @@ public class User {
 
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "profile_image")
+    private String profileImage; // 프로필 이미지 경로
 }

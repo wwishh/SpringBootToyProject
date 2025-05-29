@@ -15,11 +15,28 @@
 
         <div class="nav-right">
             <th:block sec:authorize="isAuthenticated()">
-                <span class="username">👤 <span sec:authentication="name"></span></span>
+
+                <!-- 프로필 이미지 또는 아이콘 -->
+                <span>
+                    <img th:if="${loginUser != null and loginUser.profileImage != null}"
+                         th:src="@{${loginUser.profileImage}}"
+                         alt="프로필"
+                         style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; vertical-align: middle;" />
+                    <span th:if="${loginUser == null or loginUser.profileImage == null}">👤</span>
+                </span>
+
+                <!-- 사용자 이름 -->
+                <span class="username" th:text="${loginUser.username}"></span>
+
+                <!-- 마이페이지 버튼 -->
+                <a href="/mypage" class="btn nav">🙋 마이페이지</a>
+
+                <!-- 로그아웃 버튼 -->
                 <form th:action="@{/logout}" method="post" style="display:inline;">
                     <button type="submit" class="btn logout">로그아웃</button>
                 </form>
             </th:block>
+
             <th:block sec:authorize="!isAuthenticated()">
                 <a href="/login" class="btn login">로그인</a>
                 <a href="/signup" class="btn signup">회원가입</a>
