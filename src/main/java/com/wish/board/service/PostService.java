@@ -67,4 +67,16 @@ public class PostService {
 
         postRepository.delete(post);
     }
+
+    public List<Post> searchPosts(String keyword, String searchType) {
+        switch (searchType) {
+            case "content":
+                return postRepository.findByContentContainingIgnoreCase(keyword);
+            case "author":
+                return postRepository.findByAuthorContainingIgnoreCase(keyword);
+            default: // "title"
+                return postRepository.findByTitleContainingIgnoreCase(keyword);
+        }
+    }
+
 }

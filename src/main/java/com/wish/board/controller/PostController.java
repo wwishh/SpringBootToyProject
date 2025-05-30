@@ -29,8 +29,17 @@ public class PostController {
     private final CommentService commentService;
 
     @GetMapping
-    public String list(Model model) {
-        List<Post> posts = postService.getAllPosts();
+    public String list(@RequestParam(value = "keyword", required = false) String keyword,
+                       @RequestParam(value = "searchType", required = false, defaultValue = "title") String searchType,
+                       Model model) {
+
+        List<Post> posts;
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            posts = postService.searchPosts(keyword.trim(), searchType);
+        } else {
+            posts = postService.getAllPosts();
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         List<Map<String, Object>> formattedPosts = posts.stream().map(post -> {
@@ -41,7 +50,6 @@ public class PostController {
             map.put("createdAt", post.getCreatedAt() != null ? post.getCreatedAt().format(formatter) : "");
             map.put("hasImage", post.getImagePath() != null && !post.getImagePath().isBlank());
 
-
             // 댓글 수 추가
             int commentCount = commentService.getCommentsByPostId(post.getId()).size();
             map.put("commentCount", commentCount);
@@ -50,6 +58,8 @@ public class PostController {
         }).collect(Collectors.toList());
 
         model.addAttribute("posts", formattedPosts);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("searchType", searchType);
         return "post/list";
     }
 
