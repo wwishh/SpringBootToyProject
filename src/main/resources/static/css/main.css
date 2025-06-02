@@ -281,3 +281,30 @@ textarea {
   margin-top: 10px;
 }
 
+.pagination ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 0;
+}
+
+.pagination li {
+    display: inline;
+}
+
+.pagination a {
+    padding: 5px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+}
+
+.pagination .active a {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+}
+
+

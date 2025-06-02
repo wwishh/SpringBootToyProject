@@ -9,7 +9,7 @@
 <div th:replace="~{fragments/header :: header-bar}"></div>
 
 <div class="container">
-    <h1>게시판</h1>
+    <h1>자유게시판</h1>
 
     <div class="write-btn-container">
         <form th:action="@{/posts}" method="get" class="search-form">
@@ -45,6 +45,24 @@
         </tr>
         </tbody>
     </table>
+
+    <!-- 페이징 -->
+    <div class="pagination">
+        <ul>
+            <li th:if="${currentPage > 0}">
+                <a th:href="@{/posts(page=${currentPage - 1}, keyword=${keyword}, searchType=${searchType})}">이전</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a th:href="@{/posts(page=${i}, keyword=${keyword}, searchType=${searchType})}"
+                   th:text="${i + 1}"></a>
+            </li>
+            <li th:if="${currentPage + 1 < totalPages}">
+                <a th:href="@{/posts(page=${currentPage + 1}, keyword=${keyword}, searchType=${searchType})}">다음</a>
+            </li>
+        </ul>
+    </div>
+
 </div>
 </body>
 </html>

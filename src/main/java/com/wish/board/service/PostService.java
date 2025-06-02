@@ -4,6 +4,9 @@ import com.wish.board.domain.Post;
 import com.wish.board.repository.CommentRepository;
 import com.wish.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -68,14 +71,21 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    public List<Post> searchPosts(String keyword, String searchType) {
+    public Page<Post> getPagedPosts(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")); // 페이지 번호는 0부터 시작, size는 10
+        return postRepository.findAll(pageRequest);
+    }
+
+    // 검색 포함 버전
+    public Page<Post> searchPosts(String keyword, String searchType, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         switch (searchType) {
             case "content":
-                return postRepository.findByContentContainingIgnoreCase(keyword);
+                return postRepository.findByContentContainingIgnoreCase(keyword, pageRequest);
             case "author":
-                return postRepository.findByAuthorContainingIgnoreCase(keyword);
-            default: // "title"
-                return postRepository.findByTitleContainingIgnoreCase(keyword);
+                return postRepository.findByAuthorContainingIgnoreCase(keyword, pageRequest);
+            default:
+                return postRepository.findByTitleContainingIgnoreCase(keyword, pageRequest);
         }
     }
 

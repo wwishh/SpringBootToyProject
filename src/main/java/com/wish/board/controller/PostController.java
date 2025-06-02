@@ -5,6 +5,7 @@ import com.wish.board.service.PostService;
 import com.wish.board.service.CommentService;
 import com.wish.board.domain.Comment;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -31,37 +32,39 @@ public class PostController {
     @GetMapping
     public String list(@RequestParam(value = "keyword", required = false) String keyword,
                        @RequestParam(value = "searchType", required = false, defaultValue = "title") String searchType,
+                       @RequestParam(value = "page", defaultValue = "0") int page,
                        Model model) {
 
-        List<Post> posts;
+        int size = 10; // 한 페이지당 게시글 수
+        Page<Post> postPage;
 
         if (keyword != null && !keyword.trim().isEmpty()) {
-            posts = postService.searchPosts(keyword.trim(), searchType);
+            postPage = postService.searchPosts(keyword.trim(), searchType, page, size);
         } else {
-            posts = postService.getAllPosts();
+            postPage = postService.getPagedPosts(page, size);
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        List<Map<String, Object>> formattedPosts = posts.stream().map(post -> {
+        List<Map<String, Object>> formattedPosts = postPage.stream().map(post -> {
             Map<String, Object> map = new HashMap<>();
             map.put("id", post.getId());
             map.put("title", post.getTitle());
             map.put("author", post.getAuthor());
             map.put("createdAt", post.getCreatedAt() != null ? post.getCreatedAt().format(formatter) : "");
             map.put("hasImage", post.getImagePath() != null && !post.getImagePath().isBlank());
-
-            // 댓글 수 추가
             int commentCount = commentService.getCommentsByPostId(post.getId()).size();
             map.put("commentCount", commentCount);
-
             return map;
         }).collect(Collectors.toList());
 
         model.addAttribute("posts", formattedPosts);
+        model.addAttribute("currentPage", postPage.getNumber());
+        model.addAttribute("totalPages", postPage.getTotalPages());
         model.addAttribute("keyword", keyword);
         model.addAttribute("searchType", searchType);
         return "post/list";
     }
+
 
     @GetMapping("/new")
     public String createForm(Model model) {
