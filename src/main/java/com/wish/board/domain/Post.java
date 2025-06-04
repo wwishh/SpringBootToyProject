@@ -26,6 +26,8 @@ public class Post {
 
     private String imagePath; // 예: /uploads/image123.png
 
+    @Column(nullable = false)
+    private int viewCount = 0;
 
     @PrePersist
     public void prePersist() {

@@ -52,6 +52,7 @@ public class PostController {
             map.put("author", post.getAuthor());
             map.put("createdAt", post.getCreatedAt() != null ? post.getCreatedAt().format(formatter) : "");
             map.put("hasImage", post.getImagePath() != null && !post.getImagePath().isBlank());
+            map.put("viewCount", post.getViewCount()); // ✅ 조회수 포함
             int commentCount = commentService.getCommentsByPostId(post.getId()).size();
             map.put("commentCount", commentCount);
             return map;
@@ -89,7 +90,7 @@ public class PostController {
 
     @GetMapping("/{id}")
     public String detail(@PathVariable("id") Long id, Model model) {
-        Post post = postService.findById(id);
+        Post post = postService.findByIdAndIncreaseView(id); // ✅ 조회수 증가되는 메서드 사용
         String formattedDate = post.getCreatedAt() != null ? post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : "";
 
         List<Comment> comments = commentService.getCommentsByPostId(id);

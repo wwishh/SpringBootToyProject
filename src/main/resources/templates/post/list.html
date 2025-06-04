@@ -32,6 +32,8 @@
             <th>제목</th>
             <th>작성자</th>
             <th>작성일</th>
+            <th>댓글수</th>
+            <th>조회수</th>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +44,8 @@
         </span><a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">제목</a><span class="comment-count" th:text="'[' + ${post.commentCount} + ']'">[0]</span></td>
             <td th:text="${post.author}">작성자</td>
             <td th:text="${post.createdAt}">2025-05-16</td>
+            <td th:text="${post.commentCount}"></td>
+            <td th:text="${post.viewCount}"></td>
         </tr>
         </tbody>
     </table>

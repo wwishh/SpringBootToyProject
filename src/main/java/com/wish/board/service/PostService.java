@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -88,5 +89,15 @@ public class PostService {
                 return postRepository.findByTitleContainingIgnoreCase(keyword, pageRequest);
         }
     }
+
+    //조히수 증가 메서드
+    @Transactional
+    public Post findByIdAndIncreaseView(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        post.setViewCount(post.getViewCount() + 1); // 조회수 증가
+        return post;
+    }
+
 
 }
