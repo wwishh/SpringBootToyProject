@@ -31,6 +31,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0' // 있어야 정상 작동
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 	// 파일 업로드를 위한 Apache Commons IO (선택)
 	implementation 'commons-io:commons-io:2.15.1'
@@ -44,4 +45,8 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs += "-parameters"  // 📌 이 부분 추가!
 }

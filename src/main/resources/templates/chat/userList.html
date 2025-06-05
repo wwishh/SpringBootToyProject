@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>채팅 사용자 목록</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div th:insert="~{fragments/header :: header-bar}"></div>
+
+<div class="container">
+  <h2>💬 채팅할 사용자 선택</h2>
+  <ul>
+    <li th:each="user : ${users}">
+      <a th:href="@{'/chat/' + ${user.username}}">
+        <!-- 프로필 이미지가 있으면 보여주고 -->
+        <img th:if="${user.profileImage != null}"
+             th:src="@{${user.profileImage}}"
+             style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; vertical-align: middle;" />
+        <!-- 프로필 이미지 없으면 👤 아이콘 보여줌 -->
+        <span th:unless="${user.profileImage != null}">👤</span>
+        <span th:text="${user.username}"></span> 님과 채팅하기
+      </a>
+    </li>
+
+
+  </ul>
+</div>
+</body>
+</html>
