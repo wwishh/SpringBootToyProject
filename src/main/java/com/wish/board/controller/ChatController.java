@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,7 +51,12 @@ public class ChatController {
                 .filter(user -> !user.getUsername().equals(currentUsername))
                 .collect(Collectors.toList());
 
+        // Map<String, Integer>으로 각 상대방별 미읽은 메시지 수 조회
+        Map<String, Integer> unreadCounts = chatMessageService.getUnreadCountsByUser(currentUsername);
+
         model.addAttribute("users", users);
+        model.addAttribute("unreadCounts", unreadCounts);
+
         return "chat/userList";
     }
 
@@ -60,8 +66,12 @@ public class ChatController {
         String sender = principal.getName();
         String roomId = generateRoomId(sender, receiver);
 
+        // 안 읽은 메시지 읽음 처리
+        chatMessageService.markMessagesAsRead(roomId, sender);
+
         // 🔥 이전 채팅 메시지 불러오기
         List<ChatMessage> chatHistory = chatMessageService.getMessagesByRoomId(roomId);
+
 
         model.addAttribute("roomId", roomId);
         model.addAttribute("sender", sender);

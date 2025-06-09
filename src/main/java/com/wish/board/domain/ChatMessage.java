@@ -28,6 +28,13 @@ public class ChatMessage {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
+
+    @Column(name = "is_read", nullable = false)
+    private Boolean read = false;
+
+    public boolean isRead() {
+        return read != null && read;
+    }
 }
 
 

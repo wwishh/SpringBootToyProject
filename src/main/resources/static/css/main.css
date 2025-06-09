@@ -352,3 +352,69 @@ textarea {
     .chat-input button {
         padding: 8px 12px;
     }
+
+
+/* 채팅 사용자 목록 UI 스타일 */
+
+.chat-user-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chat-user-list li {
+  margin-bottom: 12px;
+}
+
+.chat-user-list li a {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background-color: #f4f6f8;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  color: #333;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.chat-user-list li a:hover {
+  background-color: #e1e5ea;
+}
+
+.chat-user-list img.profile-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 12px;
+  flex-shrink: 0;
+  border: 1px solid #ccc;
+}
+
+.chat-user-list .no-profile-icon {
+  font-size: 28px;
+  margin-right: 12px;
+  color: #888;
+  flex-shrink: 0;
+}
+
+.chat-user-list .username {
+  flex-grow: 1;
+  font-size: 16px;
+}
+
+.chat-user-list .unread-badge {
+  background-color: #e74c3c;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 12px;
+  min-width: 24px;
+  text-align: center;
+  line-height: 1.2;
+  box-shadow: 0 0 4px rgba(0,0,0,0.15);
+  user-select: none;
+}

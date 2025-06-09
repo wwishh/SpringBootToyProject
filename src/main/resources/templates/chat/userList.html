@@ -10,20 +10,18 @@
 
 <div class="container">
   <h2>💬 채팅할 사용자 선택</h2>
-  <ul>
+  <ul class="chat-user-list">
     <li th:each="user : ${users}">
       <a th:href="@{'/chat/' + ${user.username}}">
-        <!-- 프로필 이미지가 있으면 보여주고 -->
-        <img th:if="${user.profileImage != null}"
-             th:src="@{${user.profileImage}}"
-             style="width: 24px; height: 24px; border-radius: 50%; object-fit: cover; vertical-align: middle;" />
-        <!-- 프로필 이미지 없으면 👤 아이콘 보여줌 -->
-        <span th:unless="${user.profileImage != null}">👤</span>
-        <span th:text="${user.username}"></span> 님과 채팅하기
+        <img th:if="${user.profileImage != null}" th:src="@{${user.profileImage}}" alt="프로필 이미지"
+             class="profile-img" />
+        <span th:unless="${user.profileImage != null}" class="no-profile-icon">👤</span>
+        <span class="username" th:text="${user.username}"></span>
+        <span th:if="${unreadCounts[user.username] != null and unreadCounts[user.username] > 0}"
+              class="unread-badge"
+              th:text="${unreadCounts[user.username]}">0</span>
       </a>
     </li>
-
-
   </ul>
 </div>
 </body>
