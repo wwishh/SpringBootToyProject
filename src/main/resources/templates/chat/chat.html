@@ -75,6 +75,13 @@
   }
 
   connect();
+
+
+  // 채팅방 진입 시 스크롤을 최하단으로 이동
+  window.addEventListener('DOMContentLoaded', () => {
+    const chatLog = document.getElementById("chat-log");
+    chatLog.scrollTop = chatLog.scrollHeight;
+  });
 </script>
 </body>
 </html>
